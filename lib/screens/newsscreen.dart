@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:khabar/components/appbarfile.dart';
 import 'package:khabar/utils/colorsfile.dart';

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import '../utils/colorsfile.dart';
 import '../utils/textfile.dart';
 
+// ignore: camel_case_types
 class reusable {
+  // ignore: non_constant_identifier_names
   ReusableAPPbar() {
     return AppBar(
       backgroundColor: const Color.fromARGB(255, 34, 34, 34),
@@ -21,7 +23,7 @@ class reusable {
           Icons.notifications_active,
           color: AppColors.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 25,
         ),
       ],

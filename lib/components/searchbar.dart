@@ -22,8 +22,7 @@ class _SearchfeildState extends State<Searchfeild> {
         Expanded(
           child: TextField(
             controller: Searchfeild.searchcontroller,
-            autofocus: true,
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
             decoration: InputDecoration(
               prefixIcon: const Icon(
                 Icons.search,
@@ -38,11 +37,11 @@ class _SearchfeildState extends State<Searchfeild> {
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none),
               filled: true,
-              fillColor: Color.fromARGB(255, 17, 17, 17),
+              fillColor: const Color.fromARGB(255, 17, 17, 17),
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         SizedBox(
@@ -51,14 +50,13 @@ class _SearchfeildState extends State<Searchfeild> {
           child: InkWell(
             onTap: () {
               Focus.of(context).unfocus();
-
               fetchApi();
             },
             child: Container(
               decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(10)),
-              child: Icon(
+              child: const Icon(
                 Icons.search,
                 color: Colors.black,
               ),

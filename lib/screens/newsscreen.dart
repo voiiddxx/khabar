@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:khabar/backend/fetch.dart';
 import 'package:khabar/components/appbarfile.dart';
 import 'package:khabar/components/searchbar.dart';
 import 'package:khabar/utils/colorsfile.dart';
 import 'package:khabar/utils/renderimage.dart';
 import 'package:khabar/utils/textfile.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -26,6 +29,13 @@ class _NewsScreenState extends State<NewsScreen> {
     news = fetchApi();
   }
 
+  _launch(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    }
+    throw "sorry i cant launch $url";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,29 +49,7 @@ class _NewsScreenState extends State<NewsScreen> {
             SizedBox(
               height: 30,
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Searchfeild(),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            Searchfeild(),
             SizedBox(
               height: 20,
             ),
@@ -123,10 +111,89 @@ class _NewsScreenState extends State<NewsScreen> {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          child: Text(
-                            snapshot.data![index]['title'],
-                            style: TextStyle(color: Colors.white),
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                              left: 6, right: 6, top: 6, bottom: 10),
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 30),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  width: double.infinity,
+                                  child: Image.network(
+                                    snapshot.data![index]['urlToImage'] != null
+                                        ? snapshot.data![index]['urlToImage']
+                                        : RenderImages.imageurl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 50, top: 5, bottom: 4),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        BoldText(
+                                            colors: Colors.white,
+                                            size: 15,
+                                            text: snapshot.data![index]
+                                                ['title']),
+                                        Modifeidtext(
+                                            text: snapshot.data![index]
+                                                    ['description']
+                                                .toString(),
+                                            size: 15,
+                                            colors: Colors.grey),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                        SizedBox(
+                                          height: 45,
+                                          width: 130,
+                                          child: ElevatedButton(
+                                            onPressed: () async {
+                                              try {
+                                                final url = Uri.parse(snapshot
+                                                    .data![index]['url']);
+                                                if (await canLaunchUrl(url)) {
+                                                  await launchUrl(url);
+                                                }
+                                              } catch (e) {
+                                                print(e.toString());
+                                              }
+                                            },
+                                            child: Text(
+                                              "Read More",
+                                              style: GoogleFonts.lato(
+                                                  color: Colors.black,
+                                                  fontSize: 15),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 0,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15)),
+                                                backgroundColor:
+                                                    AppColors.primary),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
